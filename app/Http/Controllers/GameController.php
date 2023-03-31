@@ -11,6 +11,6 @@ class GameController extends Controller
     public function choices()
     {
         $game = new Game();
-        return $game ->choices;
+        return $game ->randomChoices();
     }
 }

@@ -27,8 +27,10 @@ class Game extends Model
     public array $historical;
 
 
-    public function randomChoice()
+    public function randomChoices()
     {
+        $randomChoice = $this -> choices[random_int(0,2)]["nombre"];
+        return $randomChoice;
     }
 
     public function newGame()
