@@ -1,25 +1,45 @@
 <?php
 
-class Game
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Game extends Model
 {
-    public array $players;
-    public array $choices;
+    public $players = [];
+    public $choices = [
+        [
+            "nombre" => "piedra",
+            "gana" => "tijeras",
+            "pierde" => "papel"
+        ],
+        [
+            "nombre" => "papel",
+            "gana" => "piedra",
+            "pierde" => "tijeras"
+        ],
+        [
+            "nombre" => "tijeras",
+            "gana" => "papel",
+            "pierde" => "piedra"
+        ],
+    ];
     public array $historical;
 
-    public function randomChoice () {
 
+    public function randomChoice()
+    {
     }
 
-    public function newGame(){
-
+    public function newGame()
+    {
     }
 
-    public function getHistorical(){
-
+    public function getHistorical()
+    {
     }
 
-    public function reset(){
-        
+    public function reset()
+    {
     }
-
 }

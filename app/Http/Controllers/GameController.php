@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -9,24 +10,7 @@ class GameController extends Controller
 
     public function choices()
     {
-        $choices = [
-            [
-                "nombre" => "piedra",
-                "gana" => "tijeras",
-                "pierde" => "papel"
-            ],
-            [
-                "nombre" => "papel",
-                "gana" => "piedra",
-                "pierde" => "tijeras"
-            ],
-            [
-                "nombre" => "tijeras",
-                "gana" => "papel",
-                "pierde" => "piedra"
-            ],
-        ];
-
-        return $choices;
+        $game = new Game();
+        return $game ->choices;
     }
 }
