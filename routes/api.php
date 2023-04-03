@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GameController;
+use App\Models\Historical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,12 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+$historical = [];
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get("/test", function (){
-    return "Hola mundo";
-});
+// Route::get("/test", function (){
+    
+//     return "Hola mundo";
+// });
 
-Route::get("/test1", [GameController::class, "choices"]);
+Route::get("/test/", [GameController::class, "test"]);
+
+Route::post("/player", [GameController::class, "setData"]);

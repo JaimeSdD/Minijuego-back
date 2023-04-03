@@ -2,31 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GameController extends Controller
 {
-
-    public function choices()
+    
+    public function setData(Request $request)
     {
-        $choices = [
-            [
-                "nombre" => "piedra",
-                "gana" => "tijeras",
-                "pierde" => "papel"
-            ],
-            [
-                "nombre" => "papel",
-                "gana" => "piedra",
-                "pierde" => "tijeras"
-            ],
-            [
-                "nombre" => "tijeras",
-                "gana" => "papel",
-                "pierde" => "piedra"
-            ],
-        ];
+        $computerSelection = (new Game)->computerSelection();
+        
+        $json = json_encode($request->all());
+        $json = json_decode($json, true);
+        
+        $turn = end($json["historical"]);
+        $turn["computer"] = $computerSelection;
+        $json["historical"] = $turn;
+        $historical = $json;
+        json_encode($historical);
 
-        return $choices;
+        Cache::put("historical", $historical);
+
+        return json_encode($historical);
+    }
+    
+
+    public function test()
+    {
+        $historical = Cache::get("historical");
+     
+        return $historical;
     }
 }
