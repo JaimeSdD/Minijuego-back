@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Cache;
 
 class Game extends Model
@@ -27,7 +25,6 @@ class Game extends Model
             "pierde" => "piedra"
         ],
     ];
-    public $historical = [];
 
 
     public function computerSelection()
@@ -37,24 +34,44 @@ class Game extends Model
         return $computerSelection;
     }
 
-    public function newGame()
+    public function computeResult($player, $computer)
     {
+        foreach ($this->choices as $key => $choice) {
+            if ($choice["nombre"] === $player) {
+
+                if ($choice["gana"] === $computer) {
+                    $result = "victoria";
+                } else if ($choice["pierde"] === $computer) {
+                    $result = "derrota";
+                } else {
+                    $result = "empate";
+                }
+            }
+        }
+        return $result;
     }
 
     public function getHistorical()
-    {   
+    {
 
         $historical = Cache::get("historical");
-        $computerSelection = $this->computerSelection();
+
+        error_log(json_encode($historical));
 
         $json = json_encode($historical);
         $json = json_decode($json, true);
-
+        
         $turn = end($json["historical"]);
-        $turn["computer"] = $computerSelection;
-        $json["historical"] = $turn;
+        
+        $player = $turn["player"];
+        $computer = $turn["computer"];
+        $result = $this -> computeResult($player, $computer);
+        $turn["result"] = $result;
+        
+        $arrLength = count($json["historical"]) - 1;  
+        $json["historical"][$arrLength] = $turn;
         $historical = $json;
-
+        
         return json_encode($historical);
     }
 
