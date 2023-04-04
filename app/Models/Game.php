@@ -40,11 +40,11 @@ class Game extends Model
             if ($choice["nombre"] === $player) {
 
                 if ($choice["gana"] === $computer) {
-                    $result = "Victoria";
+                    $result = "victoria";
                 } else if ($choice["pierde"] === $computer) {
-                    $result = "Derrota";
+                    $result = "derrota";
                 } else {
-                    $result = "Empate";
+                    $result = "empate";
                 }
             }
         }
@@ -55,19 +55,20 @@ class Game extends Model
     {
 
         $historical = Cache::get("historical");
-        $computerSelection = $this->computerSelection();
+        $computer = $this->computerSelection();
 
         $json = json_encode($historical);
         $json = json_decode($json, true);
 
         $turn = end($json["historical"]);
         $player = $turn["player"];
-        $turn["computer"] = $computerSelection;
+        $turn["computer"] = $computer;
+
+        $result = $this -> computeResult($player, $computer);
+        $turn["result"] = $result;
 
         $json["historical"] = $turn;
         $historical = $json;
-
-        error_log(json_encode($player));
 
         return json_encode($historical);
     }

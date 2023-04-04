@@ -24,7 +24,7 @@ class GameController extends Controller
 
     public function test()
     {
-        $historical = (new Game) -> computeResult("tijeras", "tijeras");
+        $historical = (new Game) -> getHistorical();
 
         return $historical;
     }
