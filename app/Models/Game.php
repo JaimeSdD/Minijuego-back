@@ -55,21 +55,23 @@ class Game extends Model
     {
 
         $historical = Cache::get("historical");
-        $computer = $this->computerSelection();
+
+        error_log(json_encode($historical));
 
         $json = json_encode($historical);
         $json = json_decode($json, true);
-
+        
         $turn = end($json["historical"]);
+        
         $player = $turn["player"];
-        $turn["computer"] = $computer;
-
+        $computer = $turn["computer"];
         $result = $this -> computeResult($player, $computer);
         $turn["result"] = $result;
-
-        $json["historical"] = $turn;
+        
+        $arrLength = count($json["historical"]) - 1;  
+        $json["historical"][$arrLength] = $turn;
         $historical = $json;
-
+        
         return json_encode($historical);
     }
 
