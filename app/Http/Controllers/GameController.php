@@ -11,22 +11,10 @@ class GameController extends Controller
     
     public function setData(Request $request)
     {
-        $historical = $request -> all();
-        $computer = (new Game)->computerSelection();
-        
-        $json = json_encode($historical);
-        $json = json_decode($json, true);
-        
-        $turn = end($json["historical"]);
-        $turn["computer"] = $computer;
-        
-        $arrLength = count($json["historical"]) - 1;      
-        $json["historical"][$arrLength] = $turn;
-        $historical = $json;     
 
-        Cache::put("historical", $historical);
+        $historical = (new Game) -> setHistorical($request);
 
-        return response() -> json($historical);
+        return $historical;
      
     }
     
