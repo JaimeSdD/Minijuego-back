@@ -53,10 +53,8 @@ class Game extends Model
 
     public function getHistorical()
     {
-
+        if(Cache::has("historical")){
         $historical = Cache::get("historical");
-
-        error_log(json_encode($historical));
 
         $json = json_encode($historical);
         $json = json_decode($json, true);
@@ -71,11 +69,16 @@ class Game extends Model
         $arrLength = count($json["historical"]) - 1;  
         $json["historical"][$arrLength] = $turn;
         $historical = $json;
+
+        //  error_log(json_encode($historical));
+        //  error_log(json_encode(count($historical["historical"])));
         
+        if(count($historical["historical"]) === 11){
+            array_shift($historical["historical"]);
+        }
+
         return json_encode($historical);
+        }   
     }
 
-    public function reset()
-    {
-    }
 }

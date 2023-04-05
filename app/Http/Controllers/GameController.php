@@ -17,20 +17,16 @@ class GameController extends Controller
         $json = json_encode($historical);
         $json = json_decode($json, true);
         
-        
         $turn = end($json["historical"]);
         $turn["computer"] = $computer;
         
         $arrLength = count($json["historical"]) - 1;      
         $json["historical"][$arrLength] = $turn;
-        $historical = $json;
-        // error_log(json_encode($historical));
-        
-
+        $historical = $json;     
 
         Cache::put("historical", $historical);
 
-        return response() -> json("Elección recibida");
+        return response() -> json($historical);
      
     }
     
@@ -42,10 +38,11 @@ class GameController extends Controller
         return $historical;
     }
 
-    // public function test()
-    // {
-    //     $historical = (new Game) -> getHistorical();
+    public function deleteData()
+    {
+        Cache::forget("historical");
 
-    //     return $historical;
-    // }
+        return response() -> json("Historial borrado");
+
+    }
 }
