@@ -59,7 +59,6 @@ class Game extends Model
 
         $turn = end($historical);
         $turn["computer"] = $computer;
-
         $player = $turn["player"];
         $result = $this -> computeResult($player, $computer);
         $turn["result"] = $result;
