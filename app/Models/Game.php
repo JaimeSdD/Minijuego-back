@@ -52,37 +52,48 @@ class Game extends Model
         return $result;
     }
 
-    public function setHistorical(Request $request){
-
-        $historical = $request -> input("historical");
-        $computer = (new Game)->computerSelection();
-
+    public function getTurn($historical, $computer)
+    {   
         $turn = end($historical);
         $turn["computer"] = $computer;
         $player = $turn["player"];
-        $result = $this -> computeResult($player, $computer);
+        $result = $this->computeResult($player, $computer);
         $turn["result"] = $result;
-        
-        $arrLength = count($historical) - 1;      
+        return $turn;
+    }
+    
+    public function updateHistorical($historical, $turn)
+    {
+        $arrLength = count($historical) - 1;
         $historical[$arrLength] = $turn;
+        
+        if (count($historical) === 11) {
+            array_shift($historical);
+        }
+        return $historical;
+    }
 
-        if(count($historical) === 11){
-                array_shift($historical);
-            }
+    public function setHistorical(Request $request)
+    {
+
+        $historical = $request->input("historical");
+        $computer = (new Game)->computerSelection();
+
+        $turn = $this->getTurn($historical, $computer);
+        $historical = $this->updateHistorical($historical, $turn);
 
         Cache::put("historical", $historical);
 
-        return response() -> json($historical);
-
+        return response()->json($historical);
     }
 
     public function getHistorical()
     {
-        if(Cache::has("historical")){
-        $historical = Cache::get("historical");
+        if (Cache::has("historical")) {
+            $historical = Cache::get("historical");
 
-        return response() -> json($historical);
-        }   
+            return response()->json($historical);
+        }
+        return response() -> json([]);
     }
-
 }
